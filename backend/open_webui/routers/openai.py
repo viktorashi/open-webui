@@ -1173,6 +1173,7 @@ RESPONSES_ALLOWED_FIELDS: dict[str, set[str]] = {
     'message': {'type', 'role', 'content'},
     'function_call': {'type', 'call_id', 'name', 'arguments', 'id'},
     'function_call_output': {'type', 'call_id', 'output'},
+    'reasoning': {'type', 'id', 'summary', 'encrypted_content', 'content'},
 }
 
 
@@ -1188,7 +1189,7 @@ def _normalize_stored_item(item: dict) -> dict:
     item_type = item.get('type', '')
     allowed = RESPONSES_ALLOWED_FIELDS.get(item_type)
     if allowed is None:
-        # Unknown type — pass through as-is (e.g. reasoning, extension items).
+        # Unknown type — pass through as-is (e.g. extension items).
         return item
     if item_type == 'function_call':
         item = {**item, **get_provider_function(item)}
